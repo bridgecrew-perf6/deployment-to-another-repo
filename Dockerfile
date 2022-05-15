@@ -1,14 +1,27 @@
-FROM golang:1.16-alpine3.13
+# Use a clean tiny image to store artifacts in
+FROM ubuntu:jammy-20220428
 
-RUN apk update && \
-    apk upgrade && \
-    apk add build-base && \
-    apk add git && \
-    git clone https://github.com/cli/cli.git gh-cli && \
-    cd gh-cli && \
-    make && \
-    mv ./bin/gh /usr/local/bin/
+# Copy all needed files
+COPY entrypoint.sh /
 
-ADD entrypoint.sh /entrypoint.sh
+# Install needed packages
+SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+# hadolint ignore=DL3008
+RUN chmod +x /entrypoint.sh ;\
+  apt-get update -y ;\
+  apt-get install --no-install-recommends -y \
+    gpg-agent \
+    software-properties-common ;\
+  add-apt-repository ppa:git-core/ppa ;\
+  apt-get update -y ;\
+  apt-get install --no-install-recommends -y \
+    git \
+    hub \
+    jq ;\
+  apt-get clean ;\
+  rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+# Finish up
+CMD ["hub version"]
+WORKDIR /github/workspace
+ENTRYPOINT ["/entrypoint.sh"]
