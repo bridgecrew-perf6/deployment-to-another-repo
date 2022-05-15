@@ -46,12 +46,7 @@ then
   echo "Pushing git commit"
   remote_repo="https://${GITHUB_ACTOR}:${INPUT_GITHUB_TOKEN}@github.com/${REPOSITORY}.git"
   git push "${remote_repo}" HEAD:"${INPUT_DESTINATION_HEAD_BRANCH}" 
-  echo "Creating a pull request"
-  gh pr create -t $INPUT_DESTINATION_HEAD_BRANCH \
-               -b $INPUT_DESTINATION_HEAD_BRANCH \
-               -B $INPUT_DESTINATION_BASE_BRANCH \
-               -H $INPUT_DESTINATION_HEAD_BRANCH \
-                  $PULL_REQUEST_REVIEWERS
+
 else
   echo "No changes detected"
 fi
