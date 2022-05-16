@@ -11,8 +11,4 @@ RUN apk update && \
 
 ADD entrypoint.sh /entrypoint.sh
 
-# Finish up
-CMD ["hub version"]
-WORKDIR /github/workspace
-RUN ["chmod", "+x", "/entrypoint.sh"]
 ENTRYPOINT [ "/entrypoint.sh" ]
