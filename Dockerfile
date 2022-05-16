@@ -24,4 +24,4 @@ RUN chmod +x /entrypoint.sh ;\
 # Finish up
 CMD ["hub version"]
 WORKDIR /github/workspace
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
