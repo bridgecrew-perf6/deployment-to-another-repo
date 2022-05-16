@@ -44,11 +44,13 @@ if git status | grep -q "Changes to be committed"
 then
   git commit --message "Update from https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
   echo "Pushing git commit"
-  echo "URL: ${remote_repo}" HEAD:"${INPUT_DESTINATION_HEAD_BRANCH}"
-  remote_repo="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git"
-  git push "${remote_repo}" HEAD:"${INPUT_DESTINATION_HEAD_BRANCH}" 
-  
-
+  git push -u origin HEAD:$INPUT_DESTINATION_HEAD_BRANCH
+  echo "Creating a pull request"
+  gh pr create -t $INPUT_DESTINATION_HEAD_BRANCH \
+               -b $INPUT_DESTINATION_HEAD_BRANCH \
+               -B $INPUT_DESTINATION_BASE_BRANCH \
+               -H $INPUT_DESTINATION_HEAD_BRANCH \
+                  $PULL_REQUEST_REVIEWERS
 else
   echo "No changes detected"
 fi
