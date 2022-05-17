@@ -10,5 +10,5 @@ RUN apk update && \
     mv ./bin/gh /usr/local/bin/
 
 ADD entrypoint.sh /entrypoint.sh
-
+chmod +x entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
